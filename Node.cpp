@@ -11,7 +11,7 @@
 
 namespace Graph {
 
-Node_sp Node::Empty(nullptr);
+Node_sp Node::Empty;
 
 Node::Node(int64_t id, double lon, double lat) {
 	_id = id;

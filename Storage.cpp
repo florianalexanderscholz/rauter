@@ -54,7 +54,7 @@ void Storage::getNeighbors(int64_t nodeid, std::list<Graph::Node_sp> &neighbors)
         Graph::Edge_sp edge = it->second;
 
         auto val = findNodeById(edge->right());
-        if(val != nullptr)
+        if(val != Graph::Node::Empty)
         neighbors.push_back(val);
     }
 }
@@ -65,7 +65,7 @@ Graph::Node_sp Storage::findNodeById(int64_t id)
 
 	if(iter == _nodedb.end())
 	{
-		return nullptr;
+		return Graph::Node::Empty;
 	}
 	else
 	{

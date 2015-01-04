@@ -9,7 +9,7 @@
 
 namespace Graph {
 
-Edge_sp Edge::Empty(nullptr);
+Edge_sp Edge::Empty;
 
 Edge::Edge(int64_t id, int64_t left, int64_t right) {
 	_id = id;
