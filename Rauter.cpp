@@ -21,8 +21,8 @@ class WebServiceHandler: virtual public WebServiceIf {
 private:
 	Manager _mgr;
 public:
-	WebServiceHandler() :
-			_mgr("/opt/duesseldorf-regbez-latest.osm.pbf") {
+	WebServiceHandler(std::string filename) :
+			_mgr(filename.c_str()) {
 		// Your initialization goes here
 	}
 
@@ -62,8 +62,7 @@ public:
 						_return.push_back(coord);
 					});
 				}
-			}
-			else if (algorithm == "astar") {
+			} else if (algorithm == "astar") {
 				Algorithm::WayTracker tracker;
 				bool succ = _mgr.runAlgorithm(Manager::AStar, startNode,
 						endNode, tracker);
@@ -82,9 +81,7 @@ public:
 						_return.push_back(coord);
 					});
 				}
-			}
-			else
-			{
+			} else {
 				WebServiceException wex;
 				wex.__set_what("Der Algorithmus wird nicht unterstuetzt");
 				throw wex;
@@ -101,8 +98,17 @@ public:
 
 int main(int argc, char **argv) {
 	int port = 9090;
+
+	std::string filename;
+	if (argc > 2) {
+		filename = argv[1];
+	} else {
+		filename = "/opt/duesseldorf-regbez-latest.osm.pbf";
+	}
+	std::cout << "Using " << filename << std::endl;
+
 	std::cout << "Initializing Web Service" << std::endl;
-	shared_ptr<WebServiceHandler> handler(new WebServiceHandler());
+	shared_ptr<WebServiceHandler> handler(new WebServiceHandler(filename));
 	shared_ptr<TProcessor> processor(new WebServiceProcessor(handler));
 	shared_ptr<TServerTransport> serverTransport(new TServerSocket(port));
 	shared_ptr<TTransportFactory> transportFactory(
